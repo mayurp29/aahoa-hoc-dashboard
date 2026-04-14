@@ -1,4 +1,4 @@
-const DATA_URL = "./weekly-hoc-report.json";
+const DATA_URL = "./data/weekly-hoc-report.json";
 const number = new Intl.NumberFormat("en-US");
 const percent = new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 0 });
 
