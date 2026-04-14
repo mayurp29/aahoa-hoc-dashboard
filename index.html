@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AAHOA Events HOCs Dashboard</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">AAHOA Weekly Update</p>
+          <h1>AAHOA Events HOCs Dashboard</h1>
+          <p class="hero-text">
+            Weekly registration snapshot for each HOC, with the numbers the team needs for pre-reg,
+            weekly movement, member mix, and vendor coverage.
+          </p>
+        </div>
+        <div class="hero-meta panel">
+          <span class="meta-label">Report Window</span>
+          <strong id="reportWindow">Loading...</strong>
+          <span class="meta-label">Conference Status</span>
+          <strong id="statusSummary">Loading...</strong>
+        </div>
+      </header>
+
+      <main>
+        <section class="section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Executive Snapshot</p>
+              <h2>Where we stand this week</h2>
+            </div>
+          </div>
+          <div id="summaryCards" class="summary-grid"></div>
+        </section>
+
+        <section class="section two-column">
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Talking Points</p>
+                <h2>Weekly briefing</h2>
+              </div>
+            </div>
+            <div id="briefingList" class="briefing-list"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Fast Reads</p>
+                <h2>Top HOC signals</h2>
+              </div>
+            </div>
+            <div class="signal-grid">
+              <div>
+                <h3>Leading pre-registration</h3>
+                <div id="leadersList" class="mini-list"></div>
+              </div>
+              <div>
+                <h3>Top 5 HOCs by registration</h3>
+                <div id="topFiveList" class="mini-list"></div>
+              </div>
+              <div>
+                <h3>Lowest registration</h3>
+                <div id="lowestList" class="mini-list"></div>
+              </div>
+              <div>
+                <h3>Strongest weekly growth</h3>
+                <div id="growthList" class="mini-list"></div>
+              </div>
+              <div>
+                <h3>Vendor leaders</h3>
+                <div id="vendorList" class="mini-list"></div>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="section">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Filters</p>
+              <h2>Review by HOC</h2>
+            </div>
+          </div>
+          <div class="panel controls">
+            <label class="control">
+              <span>Search HOC</span>
+              <input id="searchInput" type="search" placeholder="Start typing a region or conference name" />
+            </label>
+            <label class="control">
+              <span>View</span>
+              <select id="focusSelect">
+                <option value="all">All HOCs</option>
+                <option value="growing">Only HOCs with weekly growth</option>
+                <option value="stalled">Only HOCs with no weekly growth</option>
+              </select>
+            </label>
+            <div class="control">
+              <span>Display Order</span>
+              <div class="control-static">All HOCs are shown in event-date order</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section chart-layout">
+          <article class="panel chart-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Ranked View</p>
+                <h2>Pre-registration by HOC</h2>
+              </div>
+            </div>
+            <div id="preRegChart" class="bar-chart"></div>
+          </article>
+
+          <article class="panel chart-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Movement</p>
+                <h2>Weekly increase by HOC</h2>
+              </div>
+            </div>
+            <div id="weeklyGrowthChart" class="bar-chart"></div>
+          </article>
+        </section>
+
+        <section class="section chart-layout">
+          <article class="panel chart-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Audience Mix</p>
+                <h2>Members vs non-members</h2>
+              </div>
+            </div>
+            <div id="memberMixChart" class="stacked-chart"></div>
+          </article>
+
+          <article class="panel chart-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Sponsor Health</p>
+                <h2>Vendor registration by HOC</h2>
+              </div>
+            </div>
+            <div id="vendorChart" class="bar-chart"></div>
+          </article>
+        </section>
+
+        <section class="section">
+          <article class="panel table-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Detail Table</p>
+                <h2>Weekly HOC tracker</h2>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>HOC</th>
+                    <th>Total Pre-Reg</th>
+                    <th>Members</th>
+                    <th>Non-Members</th>
+                    <th>Weekly Increase</th>
+                    <th>Vendor Reg</th>
+                    <th>Member Share</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
