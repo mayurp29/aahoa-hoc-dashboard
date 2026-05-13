@@ -175,7 +175,7 @@ function renderBriefing() {
       ],
     },
     {
-      title: "Registration leaders and low-volume HOCs",
+      title: "Registration overview",
       bullets: [
         `${topPreReg.hoc} leads the portfolio with ${number.format(topPreReg.totalPreRegistered)} pre-registrations ahead of ${formatEventDate(topPreReg.eventDate)}.`,
         `The top five HOCs by registration are ${topFive.map((row) => `${row.hoc} (${number.format(row.totalPreRegistered)})`).join(", ")}.`,
