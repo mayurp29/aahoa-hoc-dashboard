@@ -1,4 +1,4 @@
-const DATA_URL = "https://raw.githubusercontent.com/mayurp29/aahoa-hoc-dashboard/main/hoc-weekly-dashboard/data/weekly-hoc-report.json";
+const DATA_URL = "./data/weekly-hoc-report.json";
 const number = new Intl.NumberFormat("en-US");
 const percent = new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 0 });
 
@@ -8,6 +8,7 @@ const state = {
     search: "",
     focus: "all",
   },
+  exhibitorHoc: "",
 };
 
 const els = {
@@ -26,6 +27,10 @@ const els = {
   weeklyGrowthChart: document.getElementById("weeklyGrowthChart"),
   memberMixChart: document.getElementById("memberMixChart"),
   vendorChart: document.getElementById("vendorChart"),
+  exhibitorChooser: document.getElementById("exhibitorChooser"),
+  exhibitorShowName: document.getElementById("exhibitorShowName"),
+  exhibitorMeta: document.getElementById("exhibitorMeta"),
+  exhibitorList: document.getElementById("exhibitorList"),
   tableBody: document.getElementById("tableBody"),
 };
 
@@ -35,6 +40,7 @@ async function init() {
   try {
     const response = await fetch(`${DATA_URL}?v=${Date.now()}`, { cache: "no-store" });
     state.rows = (await response.json()).map(enrichRow);
+    state.exhibitorHoc = sortRowsByDate(state.rows)[0]?.hoc || "";
     bindEvents();
     render();
   } catch (error) {
@@ -60,6 +66,9 @@ function enrichRow(row) {
   const memberShare = totalPreRegistered ? memberPreRegistered / totalPreRegistered : 0;
   const vendorGap = Math.max(totalPreRegistered - vendorRegistered, 0);
   const weeklyMomentum = totalPreRegistered ? weeklyIncreaseTotal / totalPreRegistered : 0;
+  const vendorCompanies = Array.isArray(row.vendorCompanies)
+    ? row.vendorCompanies.map((company) => String(company).trim()).filter(Boolean)
+    : [];
 
   return {
     ...row,
@@ -68,6 +77,7 @@ function enrichRow(row) {
     nonMemberPreRegistered,
     weeklyIncreaseTotal,
     vendorRegistered,
+    vendorCompanies,
     memberShare,
     vendorGap,
     weeklyMomentum,
@@ -84,6 +94,13 @@ function bindEvents() {
     state.filters.focus = event.target.value;
     render();
   });
+
+  els.exhibitorChooser.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-hoc]");
+    if (!button) return;
+    state.exhibitorHoc = button.dataset.hoc || "";
+    renderExhibitors();
+  });
 }
 
 function render() {
@@ -93,6 +110,7 @@ function render() {
   renderBriefing();
   renderSignals();
   renderCharts(visibleRows);
+  renderExhibitors();
   renderTable(visibleRows);
 }
 
@@ -367,21 +385,68 @@ function renderTable(rows) {
     .join("");
 }
 
+function renderExhibitors() {
+  const rows = sortRowsByDate(state.rows);
+  if (!rows.length) {
+    els.exhibitorChooser.innerHTML = "";
+    els.exhibitorShowName.textContent = "No HOCs loaded";
+    els.exhibitorMeta.textContent = "";
+    els.exhibitorList.innerHTML = `<p class="muted">No exhibitor data is available yet.</p>`;
+    return;
+  }
+
+  const selected =
+    rows.find((row) => row.hoc === state.exhibitorHoc)
+    || rows[0];
+  state.exhibitorHoc = selected.hoc;
+
+  els.exhibitorChooser.innerHTML = rows
+    .map(
+      (row) => `
+        <button
+          type="button"
+          class="exhibitor-chip${row.hoc === selected.hoc ? " is-active" : ""}"
+          data-hoc="${escapeHtml(row.hoc)}"
+        >
+          <span>${escapeHtml(row.hoc)}</span>
+          <small>${escapeHtml(formatEventDate(row.eventDate))}</small>
+        </button>
+      `,
+    )
+    .join("");
+
+  els.exhibitorShowName.textContent = selected.eventName;
+  els.exhibitorMeta.textContent =
+    `${formatEventDate(selected.eventDate)} | ${number.format(selected.vendorCompanies.length)} exhibitors listed`;
+
+  els.exhibitorList.innerHTML = selected.vendorCompanies.length
+    ? selected.vendorCompanies
+      .map(
+        (company) => `
+          <div class="exhibitor-item">
+            <span>${escapeHtml(company)}</span>
+          </div>
+        `,
+      )
+      .join("")
+    : `<p class="muted">No exhibitor names are listed for this show yet.</p>`;
+}
+
 function getVisibleRows() {
   const search = state.filters.search;
   const focus = state.filters.focus;
 
   return sortRowsByDate(
     [...state.rows]
-    .filter((row) => {
-      const matchesSearch = !search
-        || row.hoc.toLowerCase().includes(search)
-        || row.eventName.toLowerCase().includes(search);
-      const matchesFocus = focus === "all"
-        || (focus === "growing" && row.weeklyIncreaseTotal > 0)
-        || (focus === "stalled" && row.weeklyIncreaseTotal === 0);
-      return matchesSearch && matchesFocus;
-    }),
+      .filter((row) => {
+        const matchesSearch = !search
+          || row.hoc.toLowerCase().includes(search)
+          || row.eventName.toLowerCase().includes(search);
+        const matchesFocus = focus === "all"
+          || (focus === "growing" && row.weeklyIncreaseTotal > 0)
+          || (focus === "stalled" && row.weeklyIncreaseTotal === 0);
+        return matchesSearch && matchesFocus;
+      }),
   );
 }
 
