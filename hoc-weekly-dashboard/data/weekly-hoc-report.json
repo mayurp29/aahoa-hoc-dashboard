@@ -3,7 +3,7 @@
     "hoc": "Mid South",
     "eventName": "2026 AAHOA Mid South Hotel Owners Conference & Trade Show",
     "eventType": "Hotel Owner Conferences & Trade Shows",
-    "eventDate": "",
+    "eventDate": "2026-09-29",
     "reportDate": "07/20/2026 to 07/26/2026",
     "status": "Upcoming",
     "totalPreRegistered": 5,
@@ -16,26 +16,6 @@
     "preVsActual": "5 vs 0",
     "vendorRegistered": 0,
     "vendorCompanies": []
-  },
-  {
-    "hoc": "TEST Washington D.C. Area",
-    "eventName": "TEST 2026 AAHOA Washington D.C. Area Hotel Owners Conference & Trade Show",
-    "eventType": "Hotel Owner Conferences & Trade Shows",
-    "eventDate": "",
-    "reportDate": "07/20/2026 to 07/26/2026",
-    "status": "Upcoming",
-    "totalPreRegistered": 2,
-    "memberPreRegistered": 1,
-    "nonMemberPreRegistered": 1,
-    "weeklyIncreaseTotal": 2,
-    "weeklyIncreaseMembers": 1,
-    "weeklyIncreaseNonMembers": 1,
-    "actualRegistered": 0,
-    "preVsActual": "2 vs 0",
-    "vendorRegistered": 1,
-    "vendorCompanies": [
-      "Chase"
-    ]
   },
   {
     "hoc": "South Central Texas",
